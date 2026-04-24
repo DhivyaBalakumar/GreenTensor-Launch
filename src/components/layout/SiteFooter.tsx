@@ -3,8 +3,8 @@ import { ExternalLink, Globe, Link } from "lucide-react";
 const footerNav = [
   { label: "Product", href: "/#product" },
   { label: "Pricing", href: "/pricing" },
+  { label: "PyPI Package", href: "https://pypi.org/project/greentensor/", external: true },
   { label: "Docs", href: "#", external: false },
-  { label: "Blog", href: "#", external: false },
 ];
 
 const legalLinks = [

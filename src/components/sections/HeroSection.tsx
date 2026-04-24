@@ -57,8 +57,23 @@ export default function HeroSection() {
             >
               GreenTensor monitors your AI carbon footprint, detects
               compute-anomaly threats in real time, and automates ESG
-              reporting — all from one platform.
+              reporting — all from one platform. Available now on PyPI.
             </motion.p>
+
+            {/* PyPI badge */}
+            <motion.div {...fadeUp(0.25)}>
+              <a
+                href="https://pypi.org/project/greentensor/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gt-surface border border-gt-green/30 text-gt-green text-sm font-mono hover:border-gt-green/60 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gt-green"
+              >
+                <span className="text-gt-muted">$</span> pip install greentensor
+                <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-gt-green/10 border border-gt-green/20 font-sans">
+                  v0.3.0
+                </span>
+              </a>
+            </motion.div>
 
             {/* CTA group */}
             <motion.div

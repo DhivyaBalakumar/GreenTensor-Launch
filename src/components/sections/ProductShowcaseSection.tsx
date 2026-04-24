@@ -2,124 +2,175 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Leaf, Shield, BarChart3 } from "lucide-react";
+import { Leaf, Shield, BarChart3, Package } from "lucide-react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import CircuitDivider from "@/components/ui/CircuitDivider";
 
-// ─── SDK Code Snippet ────────────────────────────────────────────────────────
+// ─── Install Banner ───────────────────────────────────────────────────────────
 
-const sdkCode = `import greentensor as gt
-
-# Instrument your model in 3 lines
-gt.init(api_key="gt_live_...")
-with gt.track("gpt-finetune-v2"):
-    model.fit(train_data, epochs=10)
-
-# That's it. Carbon, threats, ESG — all tracked.`;
-
-function SDKCodeSnippet() {
+function InstallBanner() {
   return (
     <ScrollReveal>
-      <div className="rounded-2xl overflow-hidden border border-gt-border bg-gt-bg">
-        {/* Header bar */}
-        <div className="flex items-center gap-2 px-4 py-3 bg-gt-surface border-b border-gt-border">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-red-500/60" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-            <div className="w-3 h-3 rounded-full bg-green-500/60" />
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-gt-green/30 bg-gt-green/5 px-6 py-4 mb-8">
+        <div className="flex items-center gap-3">
+          <Package size={20} className="text-gt-green shrink-0" aria-hidden="true" />
+          <div>
+            <p className="text-gt-text font-semibold text-sm">
+              Available now on PyPI
+            </p>
+            <p className="text-gt-muted text-xs mt-0.5">
+              Real package · v0.3.0 · MIT License · Python 3.9+
+            </p>
           </div>
-          <span className="ml-2 text-gt-muted text-xs font-mono">
-            train.py
-          </span>
-          <span className="ml-auto text-gt-green text-xs font-mono">
-            Python 3.11
-          </span>
         </div>
-        {/* Code */}
-        <pre className="p-5 text-sm font-mono overflow-x-auto leading-relaxed">
-          {sdkCode.split("\n").map((line, i) => {
-            // Simple syntax highlighting via spans
-            const highlighted = line
-              .replace(
-                /^(import|from|with|as)/g,
-                '<span class="text-gt-blue">$1</span>'
-              )
-              .replace(
-                /(gt\.\w+)/g,
-                '<span class="text-gt-green">$1</span>'
-              )
-              .replace(
-                /(".*?")/g,
-                '<span class="text-gt-cyan">$1</span>'
-              )
-              .replace(
-                /(#.*$)/,
-                '<span class="text-gt-muted italic">$1</span>'
-              );
-            return (
-              <div key={i} className="flex gap-4">
-                <span className="text-gt-border select-none w-4 text-right shrink-0">
-                  {i + 1}
-                </span>
-                <span
-                  className="text-gt-text"
-                  dangerouslySetInnerHTML={{ __html: highlighted }}
-                />
-              </div>
-            );
-          })}
-        </pre>
+        <div className="flex items-center gap-3">
+          <code className="px-4 py-2 rounded-lg bg-gt-bg border border-gt-border text-gt-green font-mono text-sm">
+            pip install greentensor
+          </code>
+          <a
+            href="https://pypi.org/project/greentensor/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gt-green text-xs font-medium underline hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gt-green rounded"
+          >
+            View on PyPI →
+          </a>
+        </div>
       </div>
     </ScrollReveal>
   );
 }
 
-// ─── API Example Block ────────────────────────────────────────────────────────
+// ─── SDK Code Snippet (real code from PyPI) ───────────────────────────────────
 
-const curlExample = `curl -X POST https://api.greentensor.ai/v1/runs \\
-  -H "Authorization: Bearer gt_live_..." \\
-  -H "Content-Type: application/json" \\
-  -d '{"model": "llama-3-70b", "task": "inference"}'`;
+type CodeLine = {
+  text: string;
+  type: "comment" | "keyword" | "string" | "function" | "output" | "normal" | "dim";
+};
 
-const jsonResponse = `{
-  "run_id": "run_abc123",
-  "carbon_grams": 0.42,
-  "threat_score": 0.02,
-  "esg_impact": "low",
-  "recommendations": [
-    "Switch to us-west-2 for 18% lower carbon"
-  ]
-}`;
+const installLines: CodeLine[] = [
+  { text: "pip install greentensor", type: "function" },
+];
 
-function APIExampleBlock() {
+const sdkLines: CodeLine[] = [
+  { text: "from greentensor import GreenTensor", type: "keyword" },
+  { text: "", type: "normal" },
+  { text: "# Wrap your training loop — one line", type: "comment" },
+  { text: "with GreenTensor() as gt:", type: "function" },
+  { text: "    with gt.mixed_precision():", type: "function" },
+  { text: '        train()  # your existing code, unchanged', type: "normal" },
+];
+
+const outputLines: CodeLine[] = [
+  { text: "  +======================================+", type: "dim" },
+  { text: "  |        GreenTensor Report            |", type: "function" },
+  { text: "  +======================================+", type: "dim" },
+  { text: "  Runtime          : 12.34 s", type: "normal" },
+  { text: "  Energy Used      : 0.000412 kWh", type: "normal" },
+  { text: "  CO2 Emissions    : 0.000096 kg", type: "function" },
+  { text: "  ======================================", type: "dim" },
+];
+
+const colorMap: Record<CodeLine["type"], string> = {
+  comment:  "text-gt-muted italic",
+  keyword:  "text-gt-blue",
+  string:   "text-gt-cyan",
+  function: "text-gt-green",
+  output:   "text-gt-cyan",
+  normal:   "text-gt-text",
+  dim:      "text-gt-border",
+};
+
+function CodeBlock({
+  title,
+  lang,
+  lines,
+  startLine = 1,
+}: {
+  title: string;
+  lang: string;
+  lines: CodeLine[];
+  startLine?: number;
+}) {
   return (
-    <ScrollReveal delay={0.1}>
-      <div className="rounded-2xl overflow-hidden border border-gt-border bg-gt-bg">
-        <div className="flex items-center gap-2 px-4 py-3 bg-gt-surface border-b border-gt-border">
-          <span className="text-gt-muted text-xs font-mono">REST API</span>
-          <span className="ml-auto px-2 py-0.5 rounded text-xs font-mono bg-gt-green/10 text-gt-green border border-gt-green/20">
-            POST /v1/runs
-          </span>
+    <div className="rounded-2xl overflow-hidden border border-gt-border bg-gt-bg">
+      <div className="flex items-center gap-2 px-4 py-3 bg-gt-surface border-b border-gt-border">
+        <div className="flex gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-red-500/60" />
+          <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
+          <div className="w-3 h-3 rounded-full bg-green-500/60" />
         </div>
-        <div className="p-5 space-y-4">
-          <div>
-            <p className="text-gt-muted text-xs mb-2 uppercase tracking-wider">
-              Request
-            </p>
-            <pre className="text-xs font-mono text-gt-muted leading-relaxed overflow-x-auto">
-              {curlExample}
-            </pre>
+        <span className="ml-2 text-gt-muted text-xs font-mono">{title}</span>
+        <span className="ml-auto text-gt-green text-xs font-mono">{lang}</span>
+      </div>
+      <pre className="p-5 text-sm font-mono overflow-x-auto leading-relaxed">
+        {lines.map((line, i) => (
+          <div key={i} className="flex gap-4">
+            <span className="text-gt-border select-none w-5 text-right shrink-0 text-xs">
+              {startLine + i}
+            </span>
+            <span className={colorMap[line.type]}>{line.text || "\u00A0"}</span>
           </div>
-          <div className="border-t border-gt-border pt-4">
-            <p className="text-gt-muted text-xs mb-2 uppercase tracking-wider">
-              Response
-            </p>
-            <pre className="text-xs font-mono text-gt-green leading-relaxed overflow-x-auto">
-              {jsonResponse}
-            </pre>
+        ))}
+      </pre>
+    </div>
+  );
+}
+
+function SDKCodeSnippet() {
+  return (
+    <ScrollReveal>
+      <div className="flex flex-col gap-3">
+        {/* Install */}
+        <CodeBlock title="terminal" lang="bash" lines={installLines} startLine={1} />
+        {/* Usage */}
+        <CodeBlock title="train.py" lang="Python 3.9+" lines={sdkLines} startLine={1} />
+        {/* Output */}
+        <div className="rounded-2xl overflow-hidden border border-gt-border bg-gt-bg">
+          <div className="flex items-center gap-2 px-4 py-2 bg-gt-surface border-b border-gt-border">
+            <span className="text-gt-muted text-xs font-mono">output</span>
+            <span className="ml-auto px-2 py-0.5 rounded text-xs font-mono bg-gt-green/10 text-gt-green border border-gt-green/20">
+              Real carbon report
+            </span>
           </div>
+          <pre className="p-4 text-xs font-mono overflow-x-auto leading-relaxed">
+            {outputLines.map((line, i) => (
+              <div key={i} className={colorMap[line.type]}>{line.text}</div>
+            ))}
+          </pre>
         </div>
       </div>
+    </ScrollReveal>
+  );
+}
+
+// ─── Baseline Comparison Block ────────────────────────────────────────────────
+
+const baselineCode: CodeLine[] = [
+  { text: "from greentensor import GreenTensor", type: "keyword" },
+  { text: "from greentensor.core.tracker import Tracker", type: "keyword" },
+  { text: "", type: "normal" },
+  { text: "# 1. Measure your baseline", type: "comment" },
+  { text: "tracker = Tracker()", type: "normal" },
+  { text: "tracker.start()", type: "function" },
+  { text: "train()  # unoptimized run", type: "normal" },
+  { text: "baseline = tracker.stop()", type: "function" },
+  { text: "", type: "normal" },
+  { text: "# 2. Run optimized — see real savings", type: "comment" },
+  { text: "with GreenTensor(baseline=baseline) as gt:", type: "function" },
+  { text: "    with gt.mixed_precision():", type: "function" },
+  { text: "        train()", type: "normal" },
+];
+
+function BaselineBlock() {
+  return (
+    <ScrollReveal delay={0.1}>
+      <CodeBlock
+        title="compare_baseline.py"
+        lang="Python 3.9+"
+        lines={baselineCode}
+        startLine={1}
+      />
     </ScrollReveal>
   );
 }
@@ -137,9 +188,9 @@ const tabs = [
       description:
         "See exactly how much CO₂ each model run produces. Compare workloads, set budgets, and get alerts when you exceed thresholds.",
       metrics: [
-        { label: "Today", value: "2.4 kg CO₂", delta: "-18%" },
-        { label: "This Month", value: "68 kg CO₂", delta: "-22%" },
-        { label: "Saved vs Baseline", value: "19 kg CO₂", delta: "+40%" },
+        { label: "Energy Used", value: "0.000412 kWh", delta: "per run" },
+        { label: "CO₂ Emitted", value: "0.000096 kg", delta: "per run" },
+        { label: "Saved vs Baseline", value: "40%", delta: "avg reduction" },
       ],
     },
   },
@@ -181,7 +232,6 @@ function DashboardPreview() {
   const [activeTab, setActiveTab] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
-  // Auto-advance tabs every 4s
   useEffect(() => {
     if (shouldReduceMotion) return;
     const interval = setInterval(() => {
@@ -195,7 +245,6 @@ function DashboardPreview() {
   return (
     <ScrollReveal>
       <div className="rounded-2xl overflow-hidden border border-gt-border bg-gt-surface">
-        {/* Tab bar */}
         <div
           role="tablist"
           aria-label="Dashboard views"
@@ -227,7 +276,6 @@ function DashboardPreview() {
           })}
         </div>
 
-        {/* Tab content */}
         <div
           id={`tabpanel-${tab.id}`}
           role="tabpanel"
@@ -283,7 +331,7 @@ export default function ProductShowcaseSection() {
       >
         <div className="max-w-7xl mx-auto">
           <ScrollReveal>
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <span className="section-label text-gt-cyan">{"// THE PLATFORM"}</span>
               <h2
                 id="product-heading"
@@ -293,18 +341,21 @@ export default function ProductShowcaseSection() {
                 One SDK. Full Visibility. Zero Friction.
               </h2>
               <p className="text-gt-muted mt-3 max-w-2xl mx-auto">
-                Instrument your AI in 3 lines of code. GreenTensor handles the
-                rest — carbon tracking, threat detection, and ESG reporting run
-                automatically in the background.
+                Install in one command. Wrap your training loop. GreenTensor
+                tracks carbon, detects threats, and generates ESG reports
+                automatically — no infrastructure changes needed.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          {/* PyPI install banner */}
+          <InstallBanner />
+
+          <div className="grid lg:grid-cols-2 gap-8">
             <DashboardPreview />
             <div className="flex flex-col gap-6">
               <SDKCodeSnippet />
-              <APIExampleBlock />
+              <BaselineBlock />
             </div>
           </div>
         </div>
