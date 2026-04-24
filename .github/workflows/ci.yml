@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # ─── Lint & Type Check ──────────────────────────────────────────────────────
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: greentensor-website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: greentensor-website
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+        working-directory: greentensor-website
+
+      - name: ESLint
+        run: npm run lint
+        working-directory: greentensor-website
+
+  # ─── Unit & Property Tests ──────────────────────────────────────────────────
+  test:
+    name: Unit & Property Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: greentensor-website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: greentensor-website
+
+      - name: Run Vitest
+        run: npx vitest --run --coverage
+        working-directory: greentensor-website
+
+  # ─── E2E Tests ──────────────────────────────────────────────────────────────
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: greentensor-website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: greentensor-website
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: greentensor-website
+
+      - name: Build Next.js
+        run: npm run build
+        working-directory: greentensor-website
+        env:
+          HUBSPOT_PORTAL_ID: "test"
+          HUBSPOT_FORM_GUID_WAITLIST: "test"
+          HUBSPOT_FORM_GUID_DEMO: "test"
+          HUBSPOT_FORM_GUID_TRIAL: "test"
+          HUBSPOT_ACCESS_TOKEN: "test"
+          RESEND_API_KEY: "test"
+          GREENTENSOR_PLATFORM_API_URL: "https://api.greentensor.ai"
+          GREENTENSOR_PLATFORM_API_KEY: "test"
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        working-directory: greentensor-website
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: greentensor-website/playwright-report/
+
+  # ─── Lighthouse CI ──────────────────────────────────────────────────────────
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: greentensor-website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: greentensor-website
+
+      - name: Build Next.js
+        run: npm run build
+        working-directory: greentensor-website
+        env:
+          HUBSPOT_PORTAL_ID: "test"
+          HUBSPOT_FORM_GUID_WAITLIST: "test"
+          HUBSPOT_FORM_GUID_DEMO: "test"
+          HUBSPOT_FORM_GUID_TRIAL: "test"
+          HUBSPOT_ACCESS_TOKEN: "test"
+          RESEND_API_KEY: "test"
+          GREENTENSOR_PLATFORM_API_URL: "https://api.greentensor.ai"
+          GREENTENSOR_PLATFORM_API_KEY: "test"
+
+      - name: Start Next.js server
+        run: npm start &
+        working-directory: greentensor-website
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Run Lighthouse CI
+        run: npx @lhci/cli@0.15.x autorun
+        working-directory: greentensor-website
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
