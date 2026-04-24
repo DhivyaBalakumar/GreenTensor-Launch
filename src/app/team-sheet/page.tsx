@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 export const metadata = { title: "GreenTensor — Team 08 Display Sheet" };
 
 export default function TeamSheetPage() {
