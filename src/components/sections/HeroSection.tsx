@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Button from "@/components/ui/Button";
+import CarbonCounter from "@/components/ui/CarbonCounter";
 
 const TERMINAL_LINES = [
   { text: "$ pip install greentensor", delay: 0, type: "cmd" },
@@ -65,14 +66,30 @@ function AnimatedTerminal() {
       return;
     }
 
-    const timers: ReturnType<typeof setTimeout>[] = [];
+    let restartTimer: ReturnType<typeof setTimeout>;
 
-    TERMINAL_LINES.forEach((line, i) => {
-      const t = setTimeout(() => {
-        setVisibleCount(i + 1);
-      }, line.delay);
-      timers.push(t);
-    });
+    function startSequence() {
+      const timers: ReturnType<typeof setTimeout>[] = [];
+
+      TERMINAL_LINES.forEach((line, i) => {
+        const t = setTimeout(() => {
+          setVisibleCount(i + 1);
+        }, line.delay);
+        timers.push(t);
+      });
+
+      // After all lines shown, wait 3000ms then restart
+      const lastDelay = TERMINAL_LINES[TERMINAL_LINES.length - 1].delay;
+      restartTimer = setTimeout(() => {
+        setVisibleCount(0);
+        // Small delay before re-running so the reset is visible
+        restartTimer = setTimeout(startSequence, 200);
+      }, lastDelay + 3000);
+
+      return timers;
+    }
+
+    const timers = startSequence();
 
     // Blink cursor
     const cursorInterval = setInterval(() => {
@@ -81,6 +98,7 @@ function AnimatedTerminal() {
 
     return () => {
       timers.forEach(clearTimeout);
+      clearTimeout(restartTimer);
       clearInterval(cursorInterval);
     };
   }, [shouldReduceMotion]);
@@ -151,6 +169,15 @@ export default function HeroSection() {
       aria-labelledby="hero-heading"
       className="relative min-h-screen flex flex-col justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
+      {/* Subtle green gradient overlay at top */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-96 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(34,197,94,0.04) 0%, transparent 100%)",
+        }}
+      />
       <div className="max-w-7xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left — copy */}
@@ -183,6 +210,11 @@ export default function HeroSection() {
               intelligence via <span className="text-blue-300 font-medium">AquaTensor</span>,
               and automated ESG reporting — with one line of code.
             </motion.p>
+
+            {/* Live carbon counter */}
+            <motion.div {...fadeUp(0.22)}>
+              <CarbonCounter />
+            </motion.div>
 
             {/* Live stats row */}
             <motion.div

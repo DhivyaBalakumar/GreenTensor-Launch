@@ -88,3 +88,57 @@ body {
     outline-offset: 2px;
   }
 }
+
+/* ─── Neural network particle pulse ─────────────────────────────────────── */
+@keyframes particle-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+/* ─── Eco green gradient text ────────────────────────────────────────────── */
+.text-eco-gradient {
+  background: linear-gradient(135deg, #22C55E 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Water ripple for AquaTensor ────────────────────────────────────────── */
+@keyframes water-ripple {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.water-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  animation: water-ripple 2s ease-out infinite;
+}
+
+/* ─── Breathing glow for eco elements ───────────────────────────────────── */
+@keyframes eco-breathe {
+  0%, 100% { box-shadow: 0 0 20px rgba(34,197,94,0.1); }
+  50% { box-shadow: 0 0 40px rgba(34,197,94,0.25); }
+}
+
+.eco-breathe {
+  animation: eco-breathe 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eco-breathe {
+    animation: none;
+  }
+  .water-ripple::after {
+    animation: none;
+  }
+}
+
+/* ─── Counter number animation ───────────────────────────────────────────── */
+@keyframes count-flash {
+  0% { color: #22C55E; }
+  100% { color: inherit; }
+}

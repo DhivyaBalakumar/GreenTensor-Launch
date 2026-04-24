@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
-import DotGrid from "@/components/ui/DotGrid";
+import AnimatedParticles from "@/components/ui/AnimatedParticles";
 import GlowOrbs from "@/components/ui/GlowOrbs";
 import SkipToMainContent from "@/components/layout/SkipToMainContent";
 import SiteHeader from "@/components/layout/SiteHeader";
@@ -122,7 +122,7 @@ export default function RootLayout({
         <PlausibleScript />
 
         {/* Fixed background layers */}
-        <DotGrid />
+        <AnimatedParticles />
         <GlowOrbs />
 
         {/* Accessibility */}

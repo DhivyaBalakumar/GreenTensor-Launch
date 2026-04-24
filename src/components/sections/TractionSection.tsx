@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { Shield, Package, Layers, Zap, TrendingUp, FileCheck } from "lucide-react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { useCountUp } from "@/hooks/useCountUp";
 
 type TractionCard = {
   icon: LucideIcon;
@@ -13,6 +14,63 @@ type TractionCard = {
   accent: string;
   mono?: boolean;
 };
+
+type StatItem = {
+  label: string;
+  sublabel: string;
+  numeric?: number;
+  suffix?: string;
+  staticLabel?: string;
+  accent: string;
+};
+
+const STATS: StatItem[] = [
+  { label: "Energy", sublabel: "Reduction", numeric: 29, suffix: "%", accent: "#22C55E" },
+  { label: "Water", sublabel: "Positive", staticLabel: "NET+", accent: "#3B82F6" },
+  { label: "Carbon", sublabel: "Status", staticLabel: "CLEAN", accent: "#3B82F6" },
+  { label: "ESG Time", sublabel: "Saved", numeric: 90, suffix: "%", accent: "#06B6D4" },
+];
+
+function StatCounter({ stat }: { stat: StatItem }) {
+  const shouldReduceMotion = useReducedMotion();
+  const { count, ref } = useCountUp(stat.numeric ?? 0, 1500);
+
+  if (stat.staticLabel) {
+    return (
+      <div className="flex flex-col items-center gap-1 text-center">
+        <span
+          className="text-3xl font-extrabold font-mono"
+          style={{ color: stat.accent }}
+        >
+          {stat.staticLabel}
+        </span>
+        <span className="text-gt-muted text-xs uppercase tracking-wider">
+          {stat.label}
+        </span>
+        <span className="text-gt-muted text-xs">{stat.sublabel}</span>
+      </div>
+    );
+  }
+
+  const displayed = shouldReduceMotion ? stat.numeric ?? 0 : count;
+
+  return (
+    <div className="flex flex-col items-center gap-1 text-center">
+      <span
+        ref={ref}
+        className="text-3xl font-extrabold font-mono"
+        style={{ color: stat.accent }}
+      >
+        {displayed}
+        {stat.suffix}
+      </span>
+      <span className="text-gt-muted text-xs uppercase tracking-wider">
+        {stat.label}
+      </span>
+      <span className="text-gt-muted text-xs">{stat.sublabel}</span>
+    </div>
+  );
+}
 
 const TRACTION_CARDS: TractionCard[] = [
   {
@@ -68,6 +126,16 @@ export default function TractionSection() {
       aria-labelledby="traction-heading"
       className="relative py-24 px-4 sm:px-6 lg:px-8"
     >
+      {/* Subtle green-to-transparent gradient at top */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-64 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(34,197,94,0.03) 0%, transparent 100%)",
+        }}
+      />
+
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <ScrollReveal>
@@ -113,6 +181,15 @@ export default function TractionSection() {
               </span>
               <span className="text-gt-muted text-sm">Published on PyPI</span>
             </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Stats bar */}
+        <ScrollReveal delay={0.08}>
+          <div className="mb-10 rounded-2xl border border-gt-border bg-gt-surface/60 px-6 py-6 grid grid-cols-2 sm:grid-cols-4 gap-6 divide-x divide-gt-border">
+            {STATS.map((stat) => (
+              <StatCounter key={stat.label} stat={stat} />
+            ))}
           </div>
         </ScrollReveal>
 

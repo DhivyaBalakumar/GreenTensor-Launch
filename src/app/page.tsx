@@ -1,6 +1,7 @@
 import HeroSection from "@/components/sections/HeroSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import TractionSection from "@/components/sections/TractionSection";
+import CarbonCalculatorSection from "@/components/sections/CarbonCalculatorSection";
 import ThreePillarsSection from "@/components/sections/ThreePillarsSection";
 import ProblemSection from "@/components/sections/ProblemSection";
 import LiveDemoSection from "@/components/sections/LiveDemoSection";
@@ -28,7 +29,9 @@ export default function HomePage() {
       {/* Traction — credibility numbers for investors */}
       <TractionSection />
 
-      <CircuitDivider color="cyan" />
+      <CircuitDivider color="green" />
+      <CarbonCalculatorSection />
+      <CircuitDivider color="blue" />
 
       {/* Three pillars — sustainability, GPU optimization, ESG */}
       <ThreePillarsSection />
