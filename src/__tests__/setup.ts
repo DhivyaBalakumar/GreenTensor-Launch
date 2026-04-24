@@ -16,12 +16,13 @@ vi.mock("next/navigation", () => ({
 
 // Mock next/image — render a plain img element
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line @next/next/no-img-element
   default: ({
     src,
     alt,
     width,
     height,
-    priority: _priority,
+    priority: _priority, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...rest
   }: {
     src: string;
@@ -30,8 +31,7 @@ vi.mock("next/image", () => ({
     height?: number;
     priority?: boolean;
     [key: string]: unknown;
-  }) =>
-    React.createElement("img", { src, alt, width, height, ...rest }),
+  }) => React.createElement("img", { src, alt, width, height, ...rest }),
 }));
 
 // Mock next/script — render nothing
@@ -45,23 +45,16 @@ vi.mock("framer-motion", async () => {
   const motionProxy = new Proxy(
     {},
     {
-      get: (_target, tag: string) =>
-        React.forwardRef(
+      get: (_target, tag: string) => {
+        // eslint-disable-next-line react/display-name
+        const Component = React.forwardRef(
           (
-            {
-              children,
-              initial: _i,
-              animate: _a,
-              exit: _e,
-              transition: _t,
-              whileInView: _w,
-              viewport: _v,
-              whileHover: _wh,
-              ...props
-            }: { children?: React.ReactNode; [key: string]: unknown },
+            { children, ...props }: { children?: React.ReactNode; [key: string]: unknown },
             ref: React.Ref<unknown>
           ) => React.createElement(tag, { ...props, ref }, children)
-        ),
+        );
+        return Component;
+      },
     }
   );
   return {

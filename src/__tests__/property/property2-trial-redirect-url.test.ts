@@ -1,5 +1,5 @@
 // Feature: green-tensor-website, Property 2: Trial submission always includes a non-empty redirectUrl
-import { describe, test, expect } from "vitest";
+import { describe, test } from "vitest";
 import fc from "fast-check";
 import { buildHubSpotPayload } from "@/lib/crm/hubspot";
 import { leadSchema } from "@/lib/schemas/lead";
@@ -33,21 +33,18 @@ describe("Property 2: Trial submission always includes a non-empty redirectUrl",
 
   test("simulated trial API response always includes a non-empty redirectUrl", () => {
     fc.assert(
-      fc.property(
-        fc.webUrl(),
-        (redirectUrl) => {
-          const response = {
-            success: true,
-            message: "Your free trial is ready!",
-            redirectUrl,
-          };
-          return (
-            response.success === true &&
-            typeof response.redirectUrl === "string" &&
-            response.redirectUrl.length > 0
-          );
-        }
-      ),
+      fc.property(fc.webUrl(), (redirectUrl) => {
+        const response = {
+          success: true,
+          message: "Your free trial is ready!",
+          redirectUrl,
+        };
+        return (
+          response.success === true &&
+          typeof response.redirectUrl === "string" &&
+          response.redirectUrl.length > 0
+        );
+      }),
       { numRuns: 100 }
     );
   });
