@@ -1,14 +1,134 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Button from "@/components/ui/Button";
 
-const socialProofLogos = [
-  { name: "AWS", abbr: "AWS" },
-  { name: "Google Cloud", abbr: "GCP" },
-  { name: "Microsoft Azure", abbr: "Azure" },
-  { name: "Hugging Face", abbr: "HF" },
+const TERMINAL_LINES = [
+  { text: "$ pip install greentensor", delay: 0, type: "cmd" },
+  { text: "Successfully installed greentensor-0.3.0", delay: 600, type: "success" },
+  { text: "", delay: 900, type: "blank" },
+  { text: "$ python train.py", delay: 1100, type: "cmd" },
+  { text: "[GreenTensor] Tracking enabled", delay: 1700, type: "info" },
+  { text: "[GreenTensor] Mixed precision: ON", delay: 2000, type: "info" },
+  { text: "[GreenTensor] cuDNN benchmark: ON", delay: 2300, type: "info" },
+  { text: "", delay: 2600, type: "blank" },
+  { text: "Epoch 1/3: 100%|████████| loss=0.342", delay: 2900, type: "epoch" },
+  { text: "Epoch 2/3: 100%|████████| loss=0.198", delay: 3400, type: "epoch" },
+  { text: "Epoch 3/3: 100%|████████| loss=0.091", delay: 3900, type: "epoch" },
+  { text: "", delay: 4200, type: "blank" },
+  { text: "╔══════════════════════════════════╗", delay: 4400, type: "report" },
+  { text: "║      GreenTensor Report          ║", delay: 4550, type: "report-title" },
+  { text: "╠══════════════════════════════════╣", delay: 4700, type: "report" },
+  { text: "║ Runtime        : 12.34 s         ║", delay: 4850, type: "report-data" },
+  { text: "║ Energy Used    : 0.000412 kWh    ║", delay: 5000, type: "report-data" },
+  { text: "║ CO₂ Emissions  : 0.000096 kg     ║", delay: 5150, type: "report-data" },
+  { text: "║ GPU Savings    : 23%             ║", delay: 5300, type: "report-savings" },
+  { text: "╚══════════════════════════════════╝", delay: 5450, type: "report" },
 ];
+
+function getLineClass(type: string): string {
+  switch (type) {
+    case "cmd":
+      return "text-gt-green";
+    case "success":
+      return "text-green-400";
+    case "info":
+      return "text-gt-cyan";
+    case "epoch":
+      return "text-gt-blue";
+    case "report":
+      return "text-gt-muted";
+    case "report-title":
+      return "text-gt-green font-semibold";
+    case "report-data":
+      return "text-gt-text";
+    case "report-savings":
+      return "text-gt-green font-semibold";
+    default:
+      return "text-gt-muted";
+  }
+}
+
+function AnimatedTerminal() {
+  const shouldReduceMotion = useReducedMotion();
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setVisibleCount(TERMINAL_LINES.length);
+      return;
+    }
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    TERMINAL_LINES.forEach((line, i) => {
+      const t = setTimeout(() => {
+        setVisibleCount(i + 1);
+      }, line.delay);
+      timers.push(t);
+    });
+
+    // Blink cursor
+    const cursorInterval = setInterval(() => {
+      setShowCursor((v) => !v);
+    }, 530);
+
+    return () => {
+      timers.forEach(clearTimeout);
+      clearInterval(cursorInterval);
+    };
+  }, [shouldReduceMotion]);
+
+  const lines = shouldReduceMotion ? TERMINAL_LINES : TERMINAL_LINES.slice(0, visibleCount);
+
+  return (
+    <div
+      role="img"
+      aria-label="Animated terminal showing GreenTensor installation and training output"
+      className="relative rounded-2xl overflow-hidden border border-gt-border bg-gt-bg shadow-2xl"
+    >
+      {/* Terminal toolbar */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-gt-border bg-gt-surface">
+        <div className="w-3 h-3 rounded-full bg-red-500/70" aria-hidden="true" />
+        <div className="w-3 h-3 rounded-full bg-yellow-500/70" aria-hidden="true" />
+        <div className="w-3 h-3 rounded-full bg-green-500/70" aria-hidden="true" />
+        <span className="ml-3 text-gt-muted text-xs font-mono">
+          greentensor — python train.py
+        </span>
+      </div>
+
+      {/* Terminal body */}
+      <div className="p-4 font-mono text-sm leading-relaxed min-h-[340px]">
+        {lines.map((line, i) => (
+          <div key={i} className={`${getLineClass(line.type)} whitespace-pre`}>
+            {line.text || "\u00A0"}
+          </div>
+        ))}
+        {/* Blinking cursor */}
+        {visibleCount < TERMINAL_LINES.length && !shouldReduceMotion && (
+          <span
+            aria-hidden="true"
+            className={`inline-block w-2 h-4 bg-gt-green align-middle transition-opacity duration-100 ${
+              showCursor ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        )}
+      </div>
+
+      {/* Decorative glow */}
+      <div
+        aria-hidden="true"
+        className="absolute -inset-4 -z-10 rounded-3xl pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(34,197,94,0.10) 0%, transparent 70%)",
+        }}
+      />
+    </div>
+  );
+}
 
 export default function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -33,8 +153,8 @@ export default function HeroSection() {
           <div className="flex flex-col gap-6">
             {/* Section label */}
             <motion.div {...fadeUp(0)}>
-              <span className="section-label text-gt-green">
-                {"// AI SUSTAINABILITY & SECURITY"}
+              <span className="section-label text-gt-green font-mono text-xs uppercase tracking-widest">
+                {"// CARBON-AWARE ML INFRASTRUCTURE"}
               </span>
             </motion.div>
 
@@ -43,11 +163,10 @@ export default function HeroSection() {
               id="hero-heading"
               {...fadeUp(0.1)}
               className="text-gt-text font-extrabold leading-tight"
-              style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
+              style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.75rem)" }}
             >
-              Make Your AI{" "}
-              <span className="text-gt-green">Sustainable</span> and{" "}
-              <span className="text-gt-blue">Secure</span> by Default
+              The Carbon Intelligence Layer{" "}
+              <span className="text-gt-green">for AI Infrastructure</span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -55,17 +174,47 @@ export default function HeroSection() {
               {...fadeUp(0.2)}
               className="text-gt-muted text-lg leading-relaxed max-w-xl"
             >
-              GreenTensor monitors your AI carbon footprint, detects
-              compute-anomaly threats in real time, and automates ESG
-              reporting — all from one platform. Available now on PyPI.
+              GreenTensor is an open-source Python middleware that gives every
+              AI team real-time carbon tracking, GPU optimization, and automated
+              ESG reporting — with one line of code.
             </motion.p>
 
-            {/* PyPI badge */}
-            <motion.div {...fadeUp(0.25)}>
+            {/* Live stats row */}
+            <motion.div
+              {...fadeUp(0.25)}
+              className="flex flex-wrap gap-3 items-center"
+            >
+              <a
+                href="https://pepy.tech/project/greentensor"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="PyPI download stats for greentensor"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gt-surface border border-gt-border text-gt-muted text-xs font-mono hover:border-gt-green/40 transition-colors"
+              >
+                <span className="w-2 h-2 rounded-full bg-gt-green inline-block" aria-hidden="true" />
+                PyPI Downloads
+              </a>
+              <a
+                href="https://github.com/DhivyaBalakumar/GreenTensor-Carbon-Aware-MLOps"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GreenTensor GitHub repository"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gt-surface border border-gt-border text-gt-muted text-xs font-mono hover:border-gt-blue/40 transition-colors"
+              >
+                <span aria-hidden="true">★</span> GitHub
+              </a>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gt-surface border border-gt-green/30 text-gt-green text-xs font-mono">
+                v0.3.0
+              </span>
+            </motion.div>
+
+            {/* PyPI install badge */}
+            <motion.div {...fadeUp(0.28)}>
               <a
                 href="https://pypi.org/project/greentensor/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Install greentensor from PyPI"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gt-surface border border-gt-green/30 text-gt-green text-sm font-mono hover:border-gt-green/60 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gt-green"
               >
                 <span className="text-gt-muted">$</span> pip install greentensor
@@ -77,116 +226,46 @@ export default function HeroSection() {
 
             {/* CTA group */}
             <motion.div
-              {...fadeUp(0.3)}
+              {...fadeUp(0.32)}
               className="flex flex-wrap gap-3 mt-2"
             >
-              <Button variant="primary" size="lg" href="#trial">
-                Start Free Trial
+              <Button
+                variant="primary"
+                size="lg"
+                href="#demo-section"
+                aria-label="See GreenTensor live demo"
+              >
+                See Live Demo
               </Button>
-              <Button variant="secondary" size="lg" href="#demo">
-                Request Demo
+              <Button
+                variant="secondary"
+                size="lg"
+                href="https://github.com/DhivyaBalakumar/GreenTensor-Carbon-Aware-MLOps"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View GreenTensor on GitHub"
+              >
+                View on GitHub
               </Button>
-              <Button variant="ghost" size="lg" href="#waitlist">
-                Join Waitlist
+              <Button
+                variant="ghost"
+                size="lg"
+                href="#waitlist"
+                aria-label="Get early access to GreenTensor"
+              >
+                Get Early Access
               </Button>
-            </motion.div>
-
-            {/* Social proof */}
-            <motion.div {...fadeUp(0.4)} className="mt-4">
-              <p className="text-gt-muted text-xs mb-3 uppercase tracking-widest">
-                Trusted by teams running AI on
-              </p>
-              <div className="flex flex-wrap gap-4 items-center">
-                {socialProofLogos.map((logo) => (
-                  <span
-                    key={logo.name}
-                    className="px-3 py-1.5 rounded-md bg-gt-surface border border-gt-border text-gt-muted text-xs font-mono"
-                    aria-label={logo.name}
-                  >
-                    {logo.abbr}
-                  </span>
-                ))}
-              </div>
             </motion.div>
           </div>
 
-          {/* Right — hero visual */}
+          {/* Right — animated terminal */}
           <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0 }}
-            animate={shouldReduceMotion ? {} : { opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0, x: 24 }}
+            animate={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
             className="relative"
           >
-            {/* Dashboard mockup container */}
-            <div className="relative rounded-2xl overflow-hidden border border-gt-border bg-gt-surface shadow-2xl">
-              {/* Scan-line overlay */}
-              <div
-                aria-hidden="true"
-                className="scanline absolute inset-x-0 top-0 h-0.5 bg-gt-green z-10 pointer-events-none"
-                style={{ opacity: 0 }}
-              />
-
-              {/* Dashboard placeholder */}
-              <div className="aspect-[16/10] bg-gt-surface flex flex-col">
-                {/* Fake toolbar */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-gt-border">
-                  <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
-                  <span className="ml-3 text-gt-muted text-xs font-mono">
-                    greentensor.ai/dashboard
-                  </span>
-                </div>
-
-                {/* Fake dashboard content */}
-                <div className="flex-1 p-4 grid grid-cols-3 gap-3">
-                  {/* Metric cards */}
-                  {[
-                    { label: "Carbon Saved", value: "40%", color: "text-gt-green" },
-                    { label: "Threats Blocked", value: "12", color: "text-gt-blue" },
-                    { label: "ESG Score", value: "A+", color: "text-gt-cyan" },
-                  ].map((m) => (
-                    <div
-                      key={m.label}
-                      className="bg-gt-bg rounded-lg p-3 border border-gt-border"
-                    >
-                      <p className="text-gt-muted text-xs mb-1">{m.label}</p>
-                      <p className={`text-2xl font-extrabold ${m.color}`}>
-                        {m.value}
-                      </p>
-                    </div>
-                  ))}
-
-                  {/* Fake chart area */}
-                  <div className="col-span-3 bg-gt-bg rounded-lg p-3 border border-gt-border">
-                    <p className="text-gt-muted text-xs mb-2">
-                      Carbon Footprint — Last 30 Days
-                    </p>
-                    <div className="flex items-end gap-1 h-16">
-                      {[60, 45, 70, 55, 40, 35, 50, 30, 25, 20, 28, 22].map(
-                        (h, i) => (
-                          <div
-                            key={i}
-                            className="flex-1 rounded-sm bg-gt-green/30"
-                            style={{ height: `${h}%` }}
-                          />
-                        )
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Decorative glow behind the card */}
-            <div
-              aria-hidden="true"
-              className="absolute -inset-4 -z-10 rounded-3xl"
-              style={{
-                background:
-                  "radial-gradient(ellipse at center, rgba(34,197,94,0.08) 0%, transparent 70%)",
-              }}
-            />
+            <AnimatedTerminal />
           </motion.div>
         </div>
       </div>
