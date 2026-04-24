@@ -2,13 +2,13 @@
 
 > **Make AI Sustainable and Secure by Default**
 
-The official marketing website for [GreenTensor](https://greentensor.ai) — an AI sustainability and security platform that monitors carbon footprint, detects compute-anomaly threats, and automates ESG reporting.
+The official marketing website for [GreenTensor](https://green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app/) — an AI sustainability and security platform that monitors carbon footprint, detects compute-anomaly threats, and automates ESG reporting.
 
 ---
 
 ## 🌐 Live URL
 
-> **https://greentensor-launch.vercel.app** *(update this once Vercel deployment is complete)*
+> **https://green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app/**
 
 ---
 
