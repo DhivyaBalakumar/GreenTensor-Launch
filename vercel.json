@@ -52,8 +52,7 @@
     {
       "source": "/docs",
       "destination": "https://docs.greentensor.ai",
-      "permanent": true,
-      "statusCode": 308
+      "permanent": true
     }
   ]
 }
