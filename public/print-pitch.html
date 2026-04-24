@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>GreenTensor — Pitch Poster</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  width:210mm;min-height:297mm;
+  background:#050A0E;color:#F8FAFC;
+  font-family:'Inter',sans-serif;
+  padding:0;
+  print-color-adjust:exact;
+  -webkit-print-color-adjust:exact;
+}
+
+.accent-bar{
+  height:4px;
+  background:linear-gradient(90deg,#22C55E 0%,#3B82F6 50%,#06B6D4 100%);
+}
+
+.page{padding:9mm 11mm 7mm;}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6mm;}
+.logo-wrap{display:flex;align-items:center;gap:9px;}
+.logo-box{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(59,130,246,0.15));
+  border:1.5px solid rgba(34,197,94,0.4);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:900;
+}
+.lg{color:#22C55E;}.lt{color:#3B82F6;}
+.brand{font-size:18px;font-weight:800;letter-spacing:-0.5px;}
+.brand span{color:#22C55E;}
+.meta-pill{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:#94A3B8;background:#0F1923;
+  border:1px solid #1E2D3D;border-radius:6px;padding:4px 10px;
+}
+
+/* ── BIG STATEMENT ── */
+.statement{
+  margin-bottom:6mm;
+  padding:7mm 8mm;
+  background:linear-gradient(135deg,#0F1923 0%,rgba(34,197,94,0.04) 100%);
+  border:1px solid #1E2D3D;border-radius:14px;
+  position:relative;overflow:hidden;
+}
+.statement::after{
+  content:'';position:absolute;
+  bottom:-30px;right:-30px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(59,130,246,0.06) 0%,transparent 70%);
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.18em;text-transform:uppercase;
+  color:#22C55E;margin-bottom:5px;
+}
+.big-h{font-size:22px;font-weight:900;line-height:1.15;margin-bottom:5px;letter-spacing:-0.3px;}
+.big-h .g{color:#22C55E;}.big-h .b{color:#3B82F6;}.big-h .a{color:#93C5FD;}
+.big-sub{font-size:11px;color:#94A3B8;line-height:1.6;max-width:420px;}
+
+/* ── PROBLEM / SOLUTION ── */
+.ps{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-bottom:5mm;}
+.ps-card{background:#0F1923;border-radius:12px;padding:5mm;}
+.ps-card.prob{border:1px solid rgba(239,68,68,0.3);}
+.ps-card.sol{border:1px solid rgba(34,197,94,0.4);}
+.ps-head{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.08em;margin-bottom:5px;
+  font-family:'JetBrains Mono',monospace;
+}
+.ps-card.prob .ps-head{color:#EF4444;}
+.ps-card.sol .ps-head{color:#22C55E;}
+.ps-item{
+  display:flex;align-items:flex-start;gap:6px;
+  font-size:10.5px;color:#94A3B8;margin-bottom:4px;line-height:1.45;
+}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.ps-card.prob .dot{background:#EF4444;}
+.ps-card.sol .dot{background:#22C55E;}
+.ps-item strong{color:#F8FAFC;}
+
+/* ── STATS BAR ── */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:4mm;margin-bottom:5mm;
+}
+.stat{
+  background:#0F1923;border:1px solid #1E2D3D;
+  border-radius:10px;padding:4mm;text-align:center;
+}
+.stat-n{font-size:24px;font-weight:900;font-family:'JetBrains Mono',monospace;line-height:1;}
+.stat-n.g{color:#22C55E;}.stat-n.b{color:#3B82F6;}
+.stat-n.a{color:#93C5FD;}.stat-n.c{color:#06B6D4;}
+.stat-l{font-size:9px;color:#94A3B8;margin-top:3px;line-height:1.3;}
+
+/* ── WHY NOW ── */
+.why-now{
+  background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(59,130,246,0.05));
+  border:1px solid rgba(34,197,94,0.25);
+  border-radius:12px;padding:5mm;margin-bottom:5mm;
+}
+.why-head{
+  font-size:10px;font-weight:700;color:#22C55E;
+  font-family:'JetBrains Mono',monospace;
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;
+}
+.why-text{font-size:10.5px;color:#94A3B8;line-height:1.6;}
+.why-text strong{color:#F8FAFC;}
+
+/* ── BOTTOM ROW ── */
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-bottom:5mm;}
+
+.code-block{
+  background:#050A0E;border:1px solid #1E2D3D;
+  border-radius:10px;overflow:hidden;
+}
+.code-bar{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;background:#0F1923;border-bottom:1px solid #1E2D3D;
+}
+.dot-r{width:8px;height:8px;border-radius:50%;background:#EF4444;opacity:0.7;}
+.dot-y{width:8px;height:8px;border-radius:50%;background:#F59E0B;opacity:0.7;}
+.dot-g{width:8px;height:8px;border-radius:50%;background:#22C55E;opacity:0.7;}
+.code-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:#94A3B8;margin-left:4px;}
+.code-body{
+  padding:5mm;font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;line-height:1.8;
+}
+.ck{color:#3B82F6;}.cv{color:#22C55E;}.cc{color:#94A3B8;font-style:italic;}
+.cf{color:#06B6D4;}.cn{color:#F8FAFC;}
+
+.report-mini{
+  background:#050A0E;border:1px solid #1E2D3D;
+  border-radius:10px;padding:5mm;
+  font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.8;
+}
+.rt{color:#22C55E;font-weight:700;}
+.rb{color:#1E2D3D;}
+.rd{color:#F8FAFC;}
+.rs{color:#22C55E;font-weight:700;}
+.rsec{color:#94A3B8;}
+.ra{color:#93C5FD;}
+.rap{color:#93C5FD;font-weight:700;}
+
+/* ── FOOTER ── */
+.footer{
+  border-top:1px solid #1E2D3D;padding-top:5mm;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.f-left{font-size:10px;color:#94A3B8;line-height:1.7;}
+.f-left strong{color:#F8FAFC;}
+.install{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:#22C55E;background:#050A0E;
+  border:1px solid rgba(34,197,94,0.35);border-radius:7px;
+  padding:6px 12px;display:inline-block;margin-bottom:4px;
+}
+.dollar{color:#94A3B8;}
+.f-links{font-size:9px;color:#94A3B8;font-family:'JetBrains Mono',monospace;text-align:right;}
+.f-links a{color:#22C55E;text-decoration:none;}
+.badges{display:flex;gap:4px;justify-content:flex-end;margin-top:5px;}
+.badge{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 7px;border-radius:4px;font-weight:600;}
+.bg{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22C55E;}
+.bb{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:#3B82F6;}
+.bc{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);color:#06B6D4;}
+.ba{background:rgba(147,197,253,0.1);border:1px solid rgba(147,197,253,0.3);color:#93C5FD;}
+
+@media print{body{margin:0;}@page{size:A4 portrait;margin:0;}}
+</style>
+</head>
+<body>
+
+<div class="accent-bar"></div>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-box"><span class="lg">G</span><span class="lt">T</span></div>
+      <span class="brand">Green<span>Tensor</span></span>
+    </div>
+    <div class="meta-pill">Team 08 &nbsp;·&nbsp; Dhivya Balakumar &nbsp;·&nbsp; Guide: Dr. Santosh Kumar J</div>
+  </div>
+
+  <!-- BIG STATEMENT -->
+  <div class="statement">
+    <div class="eyebrow">// The Problem We're Solving</div>
+    <div class="big-h">
+      AI is <span class="g">destroying</span> the planet.<br/>
+      <span class="b">We fix that.</span> Automatically.
+    </div>
+    <div class="big-sub">
+      GreenTensor is an open-source Python SDK that makes every AI training run carbon-aware,
+      water-positive, threat-monitored, and ESG-compliant — with one line of code.
+      No infrastructure changes. No new workflows. Just wrap and run.
+    </div>
+  </div>
+
+  <!-- PROBLEM / SOLUTION -->
+  <div class="ps">
+    <div class="ps-card prob">
+      <div class="ps-head">❌ The Problem</div>
+      <div class="ps-item"><span class="dot"></span>Training one large AI model emits as much CO₂ as <strong>5 cars over their lifetime</strong></div>
+      <div class="ps-item"><span class="dot"></span>Data centres use <strong>billions of litres of water</strong> for GPU cooling — wasted</div>
+      <div class="ps-item"><span class="dot"></span><strong>73% of AI infrastructure attacks</strong> go undetected for 24+ hours</div>
+      <div class="ps-item"><span class="dot"></span>ESG compliance reports take <strong>6 weeks</strong> to produce manually every quarter</div>
+      <div class="ps-item"><span class="dot"></span><strong>EU AI Act + SEC rules</strong> now mandate AI emissions reporting — no tools exist</div>
+    </div>
+    <div class="ps-card sol">
+      <div class="ps-head">✅ GreenTensor Solves It</div>
+      <div class="ps-item"><span class="dot"></span><strong>29% energy reduction</strong> vs baseline — measured, not estimated</div>
+      <div class="ps-item"><span class="dot"></span><strong>AquaTensor</strong>: net-positive water output via membrane distillation at 60°C</div>
+      <div class="ps-item"><span class="dot"></span>Carbon-signature <strong>anomaly detection</strong> catches threats traditional tools miss</div>
+      <div class="ps-item"><span class="dot"></span><strong>GRI, TCFD, CDP reports</strong> auto-generated — 90% time saved</div>
+      <div class="ps-item"><span class="dot"></span>Available <strong>right now</strong>: pip install greentensor · v0.6.0 · MIT</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-n g">29%</div><div class="stat-l">Energy Reduction vs Baseline</div></div>
+    <div class="stat"><div class="stat-n a">NET+</div><div class="stat-l">Water Positive (AquaTensor)</div></div>
+    <div class="stat"><div class="stat-n b">CLEAN</div><div class="stat-l">Carbon Anomaly Status</div></div>
+    <div class="stat"><div class="stat-n c">90%</div><div class="stat-l">ESG Reporting Time Saved</div></div>
+  </div>
+
+  <!-- WHY NOW -->
+  <div class="why-now">
+    <div class="why-head">// Why Now — The Regulatory Tailwind</div>
+    <div class="why-text">
+      The <strong>EU AI Act</strong> and <strong>SEC climate disclosure rules</strong> are forcing every company to measure and report AI emissions — starting now.
+      AI compute costs are exploding. A single GPT-4 training run emits ~500 tonnes of CO₂.
+      Yet no standard tooling exists for ML teams. <strong>GreenTensor is the only tool that makes this automatic</strong> —
+      dropping directly into existing PyTorch workflows with a single context manager.
+      We're not building for the future. We're solving a problem that exists today.
+    </div>
+  </div>
+
+  <!-- CODE + REPORT -->
+  <div class="bottom">
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <span class="code-label">train.py — 3 lines to instrument</span>
+      </div>
+      <div class="code-body">
+        <span class="ck">from</span> <span class="cn">greentensor</span> <span class="ck">import</span> <span class="cn">GreenTensor</span><br/>
+        <br/>
+        <span class="cc"># Wrap your existing training loop</span><br/>
+        <span class="ck">with</span> <span class="cf">GreenTensor</span><span class="cn">(</span><span class="cn">)</span> <span class="ck">as</span> <span class="cn">gt:</span><br/>
+        &nbsp;&nbsp;<span class="ck">with</span> <span class="cn">gt.</span><span class="cf">mixed_precision</span><span class="cn">():</span><br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="cf">train</span><span class="cn">()</span> &nbsp;<span class="cc"># your code, unchanged</span><br/>
+        <br/>
+        <span class="cc"># That's it. Carbon, water, threats,</span><br/>
+        <span class="cc"># ESG — all tracked automatically.</span>
+      </div>
+    </div>
+
+    <div class="report-mini">
+      <span class="rb">+====================================+</span><br/>
+      <span class="rt">|  GreenTensor Report  v0.6.0        |</span><br/>
+      <span class="rb">+====================================+</span><br/>
+      <span class="rd">Energy Used    : 0.000412 kWh</span><br/>
+      <span class="rd">CO2 Emissions  : 0.000096 kg</span><br/>
+      <span class="rs">Energy Saved   : 29.0% vs baseline</span><br/>
+      <span class="rsec">-- AquaTensor ----------------------</span><br/>
+      <span class="ra">Water Consumed : 0.000202 L</span><br/>
+      <span class="ra">Water Produced : 0.001474 L</span><br/>
+      <span class="rap">Net Impact     : NET POSITIVE ✓</span><br/>
+      <span class="rsec">-- Anomaly Detection ---------------</span><br/>
+      <span class="rs">Carbon Status  : CLEAN ✓</span><br/>
+      <span class="rs">Digital FP     : CLEAN ✓</span><br/>
+      <span class="rb">+====================================+</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="f-left">
+      <strong>Team 08</strong> &nbsp;·&nbsp; Dhivya Balakumar<br/>
+      Guide: <strong>Dr. Santosh Kumar J</strong><br/>
+      Project: GreenTensor — Sustainable, Secure &amp; Water-Positive AI
+    </div>
+    <div>
+      <div class="install"><span class="dollar">$ </span>pip install greentensor</div><br/>
+      <div class="f-links">
+        🌐 <a href="https://green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app">greentensor.vercel.app</a><br/>
+        📦 <a href="https://pypi.org/project/greentensor/">pypi.org/project/greentensor</a><br/>
+        💼 <a href="https://linkedin.com/in/dhivyabalakumar04">linkedin.com/in/dhivyabalakumar04</a>
+      </div>
+      <div class="badges">
+        <span class="badge bg">Open Source</span>
+        <span class="badge bb">PyPI Live</span>
+        <span class="badge ba">AquaTensor</span>
+        <span class="badge bc">ESG Ready</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
