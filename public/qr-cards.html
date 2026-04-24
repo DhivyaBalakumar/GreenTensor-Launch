@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>GreenTensor — QR Cards</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 210mm; min-height: 297mm;
+    background: #fff;
+    font-family: 'Inter', sans-serif;
+    padding: 8mm;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6mm;
+  }
+  .card {
+    background: #050A0E;
+    border: 1px solid #1E2D3D;
+    border-radius: 14px;
+    padding: 6mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4mm;
+    min-height: 85mm;
+  }
+  .card-top {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .logo-box {
+    width: 32px; height: 32px; background: #0F1923;
+    border: 1px solid #1E2D3D; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; flex-shrink: 0;
+  }
+  .logo-g { color: #22C55E; }
+  .logo-t { color: #3B82F6; }
+  .card-brand { font-size: 15px; font-weight: 700; color: #F8FAFC; }
+  .card-version {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: #22C55E; background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.3); border-radius: 4px;
+    padding: 2px 6px;
+  }
+  /* QR placeholder — uses Google Charts API */
+  .qr-img {
+    width: 90px; height: 90px;
+    border-radius: 8px;
+    border: 2px solid rgba(34,197,94,0.3);
+  }
+  .card-url {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    color: #22C55E; text-align: center; word-break: break-all;
+  }
+  .card-desc {
+    font-size: 10px; color: #94A3B8; text-align: center; line-height: 1.4;
+  }
+  .card-cmd {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: #22C55E; background: #050A0E;
+    border: 1px solid rgba(34,197,94,0.25); border-radius: 6px;
+    padding: 4px 10px; width: 100%; text-align: center;
+  }
+  .card-cmd .dollar { color: #94A3B8; }
+  .badges {
+    display: flex; gap: 4px; flex-wrap: wrap; justify-content: center;
+  }
+  .badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    padding: 2px 6px; border-radius: 4px; font-weight: 600;
+  }
+  .badge.g { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #22C55E; }
+  .badge.b { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); color: #3B82F6; }
+  .badge.c { background: rgba(6,182,212,0.1);  border: 1px solid rgba(6,182,212,0.3);  color: #06B6D4; }
+  .cut-line {
+    text-align: center; font-size: 9px; color: #ccc;
+    margin: 4mm 0; letter-spacing: 0.1em;
+    border-top: 1px dashed #ddd; padding-top: 3mm;
+  }
+
+  @media print {
+    body { margin: 0; background: white; }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid">
+
+  <!-- Card 1: Website -->
+  <div class="card">
+    <div class="card-top">
+      <div class="logo-box"><span class="logo-g">G</span><span class="logo-t">T</span></div>
+      <span class="card-brand">GreenTensor</span>
+      <span class="card-version">v0.6.0</span>
+    </div>
+    <img class="qr-img"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app&bgcolor=050A0E&color=22C55E&qzone=1"
+      alt="QR code for GreenTensor website" />
+    <div class="card-url">green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app</div>
+    <div class="card-desc">Live website — interactive demo, carbon calculator, and full product showcase</div>
+    <div class="badges">
+      <span class="badge g">Live Site</span>
+      <span class="badge b">Interactive Demo</span>
+    </div>
+  </div>
+
+  <!-- Card 2: PyPI -->
+  <div class="card">
+    <div class="card-top">
+      <div class="logo-box"><span class="logo-g">G</span><span class="logo-t">T</span></div>
+      <span class="card-brand">PyPI Package</span>
+      <span class="card-version">pip</span>
+    </div>
+    <img class="qr-img"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://pypi.org/project/greentensor/&bgcolor=050A0E&color=3B82F6&qzone=1"
+      alt="QR code for GreenTensor PyPI" />
+    <div class="card-url">pypi.org/project/greentensor</div>
+    <div class="card-cmd"><span class="dollar">$ </span>pip install greentensor</div>
+    <div class="card-desc">Real installable Python package — v0.6.0 · MIT License · Python 3.9+</div>
+    <div class="badges">
+      <span class="badge b">PyPI Live</span>
+      <span class="badge g">MIT License</span>
+    </div>
+  </div>
+
+  <!-- Card 3: GitHub -->
+  <div class="card">
+    <div class="card-top">
+      <div class="logo-box"><span class="logo-g">G</span><span class="logo-t">T</span></div>
+      <span class="card-brand">GitHub Repo</span>
+      <span class="card-version">src</span>
+    </div>
+    <img class="qr-img"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://github.com/DhivyaBalakumar/GreenTensor-Carbon-Aware-MLOps&bgcolor=050A0E&color=22C55E&qzone=1"
+      alt="QR code for GreenTensor GitHub" />
+    <div class="card-url">github.com/DhivyaBalakumar/GreenTensor-Carbon-Aware-MLOps</div>
+    <div class="card-desc">Full source code — open source, MIT licensed, contributions welcome</div>
+    <div class="badges">
+      <span class="badge g">Open Source</span>
+      <span class="badge c">Carbon-Aware MLOps</span>
+    </div>
+  </div>
+
+  <!-- Card 4: LinkedIn -->
+  <div class="card">
+    <div class="card-top">
+      <div class="logo-box"><span class="logo-g">G</span><span class="logo-t">T</span></div>
+      <span class="card-brand">Connect</span>
+      <span class="card-version">LinkedIn</span>
+    </div>
+    <img class="qr-img"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://www.linkedin.com/in/dhivyabalakumar04&bgcolor=050A0E&color=06B6D4&qzone=1"
+      alt="QR code for Dhivya LinkedIn" />
+    <div class="card-url">linkedin.com/in/dhivyabalakumar04</div>
+    <div class="card-desc">Dhivya Balakumar — Builder of GreenTensor · Team 08</div>
+    <div class="badges">
+      <span class="badge c">Dhivya Balakumar</span>
+      <span class="badge b">Team 08</span>
+    </div>
+  </div>
+
+  <!-- Card 5: Team Sheet -->
+  <div class="card">
+    <div class="card-top">
+      <div class="logo-box"><span class="logo-g">G</span><span class="logo-t">T</span></div>
+      <span class="card-brand">Team Sheet</span>
+      <span class="card-version">A4</span>
+    </div>
+    <img class="qr-img"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app/team-sheet.html&bgcolor=050A0E&color=22C55E&qzone=1"
+      alt="QR code for team sheet" />
+    <div class="card-url">…vercel.app/team-sheet.html</div>
+    <div class="card-desc">Official A4 team display sheet — Team 08 · Dhivya Balakumar · Dr. Santosh Kumar J</div>
+    <div class="badges">
+      <span class="badge g">Team 08</span>
+      <span class="badge b">Print Ready</span>
+    </div>
+  </div>
+
+  <!-- Card 6: Pitch Poster -->
+  <div class="card">
+    <div class="card-top">
+      <div class="logo-box"><span class="logo-g">G</span><span class="logo-t">T</span></div>
+      <span class="card-brand">Pitch Poster</span>
+      <span class="card-version">A4</span>
+    </div>
+    <img class="qr-img"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://green-tensor-launch-d8km-98ccjvkuy-dhivyas-projects-e2b392aa.vercel.app/pitch-poster.html&bgcolor=050A0E&color=3B82F6&qzone=1"
+      alt="QR code for pitch poster" />
+    <div class="card-url">…vercel.app/pitch-poster.html</div>
+    <div class="card-desc">Full pitch poster — problem, solution, stats, how it works, tech stack</div>
+    <div class="badges">
+      <span class="badge b">Pitch Ready</span>
+      <span class="badge c">Investor Grade</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="cut-line">✂ — cut along dotted lines — ✂</div>
+
+</body>
+</html>
