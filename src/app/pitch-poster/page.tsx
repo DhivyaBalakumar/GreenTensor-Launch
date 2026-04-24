@@ -65,7 +65,7 @@ export default function PitchPosterPage() {
         </div>
 
         <div className="hero">
-          <div className="hero-label">// AI SUSTAINABILITY · WATER INTELLIGENCE · SECURITY · ESG</div>
+          <div className="hero-label">{"// AI SUSTAINABILITY · WATER INTELLIGENCE · SECURITY · ESG"}</div>
           <div className="hero-h1">Make AI <span className="g">Sustainable</span>, <span className="b">Secure</span> &amp; Water-Positive</div>
           <div className="hero-sub">One Python SDK that tracks carbon, produces net-positive water output via AquaTensor, detects compute-anomaly threats, and automates ESG reporting — with one line of code.</div>
         </div>
@@ -96,7 +96,7 @@ export default function PitchPosterPage() {
           <div className="stat"><div className="stat-num c">90%</div><div className="stat-label">ESG Reporting Time Saved</div></div>
         </div>
 
-        <div className="hiw-label">// HOW IT WORKS — 4 STEPS</div>
+        <div className="hiw-label">{"// HOW IT WORKS — 4 STEPS"}</div>
         <div className="steps">
           <div className="step"><div className="step-num">01</div><div className="step-title">Install</div><div className="step-code">pip install greentensor</div></div>
           <div className="step"><div className="step-num">02</div><div className="step-title">Wrap</div><div className="step-code">with GreenTensor() as gt:</div></div>

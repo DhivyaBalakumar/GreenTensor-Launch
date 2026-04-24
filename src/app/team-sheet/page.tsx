@@ -73,7 +73,7 @@ export default function TeamSheetPage() {
         </div>
 
         <div className="title-block">
-          <div className="section-label">// PROJECT SHOWCASE</div>
+          <div className="section-label">{"// PROJECT SHOWCASE"}</div>
           <div className="project-title">
             <span className="green">Green</span><span className="blue">Tensor</span> — Sustainable &amp; Secure AI
           </div>
@@ -89,7 +89,7 @@ export default function TeamSheetPage() {
           <div className="info-card"><div className="label">Guide</div><div className="value blue">Dr. Santosh Kumar J</div></div>
         </div>
 
-        <div className="pillars-heading">// THE FOUR PILLARS</div>
+        <div className="pillars-heading">{"// THE FOUR PILLARS"}</div>
         <div className="pillars">
           <div className="pillar green"><div className="pillar-icon">🌿</div><div className="pillar-title">Carbon Tracking</div><div className="pillar-desc">Real-time CO₂ monitoring per model run</div><div className="pillar-metric">29%</div><div className="pillar-desc">energy saved</div></div>
           <div className="pillar aqua"><div className="pillar-icon">💧</div><div className="pillar-title">AquaTensor</div><div className="pillar-desc">Water intelligence via membrane distillation</div><div className="pillar-metric">NET+</div><div className="pillar-desc">water positive</div></div>
