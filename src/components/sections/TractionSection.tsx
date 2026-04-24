@@ -32,9 +32,9 @@ const TRACTION_CARDS: TractionCard[] = [
   },
   {
     icon: Layers,
-    title: "3 Pillars",
-    value: "Carbon · GPU · ESG",
-    description: "Carbon tracking, GPU optimization, and ESG reporting — unified in one SDK.",
+    title: "4 Pillars",
+    value: "Carbon · Water · Security · ESG",
+    description: "Carbon tracking, AquaTensor water intelligence, anomaly detection, and ESG reporting — unified in one SDK.",
     accent: "#06B6D4",
   },
   {
@@ -47,8 +47,8 @@ const TRACTION_CARDS: TractionCard[] = [
   {
     icon: TrendingUp,
     title: "Real Savings",
-    value: "23%+ GPU efficiency",
-    description: "Measured GPU efficiency gains via mixed precision and cuDNN benchmark tuning.",
+    value: "29%+ energy reduction",
+    description: "Measured 29% energy savings vs baseline, plus net-positive water impact via membrane distillation.",
     accent: "#3B82F6",
   },
   {
@@ -91,9 +91,15 @@ export default function TractionSection() {
           <div className="mb-10 rounded-xl border border-gt-border bg-gt-surface px-6 py-4 flex flex-wrap gap-6 items-center justify-center sm:justify-between">
             <div className="flex items-center gap-3">
               <span className="px-2.5 py-1 rounded-md bg-gt-green/10 border border-gt-green/30 text-gt-green text-xs font-mono font-semibold">
-                v0.3.0
+                v0.6.0
               </span>
               <span className="text-gt-muted text-sm">Latest stable release</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-300/30 text-blue-300 text-xs font-mono font-semibold">
+                AquaTensor
+              </span>
+              <span className="text-gt-muted text-sm">Water intelligence built-in</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="px-2.5 py-1 rounded-md bg-gt-blue/10 border border-gt-blue/30 text-gt-blue text-xs font-mono font-semibold">

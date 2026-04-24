@@ -1,23 +1,22 @@
-import { Leaf, Shield, BarChart3 } from "lucide-react";
+import { Leaf, Shield, BarChart3, Droplets } from "lucide-react";
 import type { ReactNode } from "react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import CircuitDivider from "@/components/ui/CircuitDivider";
 
 interface PillarCardProps {
-  pillar: "sustainability" | "security" | "esg";
+  pillar: "sustainability" | "security" | "esg" | "water";
   headline: string;
   body: string;
   metric: string;
   metricLabel: string;
   icon: ReactNode;
-  accentColor: "green" | "blue" | "cyan";
+  accentColor: "green" | "blue" | "cyan" | "aqua";
 }
 
 const accentStyles = {
   green: {
     border: "border-gt-green/20 hover:border-gt-green/50",
     glow: "hover:shadow-[0_0_24px_rgba(34,197,94,0.12)]",
-    label: "text-gt-green",
     metric: "text-gt-green",
     iconBg: "bg-gt-green/10",
     iconColor: "text-gt-green",
@@ -25,7 +24,6 @@ const accentStyles = {
   blue: {
     border: "border-gt-blue/20 hover:border-gt-blue/50",
     glow: "hover:shadow-[0_0_24px_rgba(59,130,246,0.12)]",
-    label: "text-gt-blue",
     metric: "text-gt-blue",
     iconBg: "bg-gt-blue/10",
     iconColor: "text-gt-blue",
@@ -33,10 +31,16 @@ const accentStyles = {
   cyan: {
     border: "border-gt-cyan/20 hover:border-gt-cyan/50",
     glow: "hover:shadow-[0_0_24px_rgba(6,182,212,0.12)]",
-    label: "text-gt-cyan",
     metric: "text-gt-cyan",
     iconBg: "bg-gt-cyan/10",
     iconColor: "text-gt-cyan",
+  },
+  aqua: {
+    border: "border-blue-300/20 hover:border-blue-300/50",
+    glow: "hover:shadow-[0_0_24px_rgba(147,197,253,0.12)]",
+    metric: "text-blue-300",
+    iconBg: "bg-blue-300/10",
+    iconColor: "text-blue-300",
   },
 };
 
@@ -76,18 +80,27 @@ const pillars: PillarCardProps[] = [
   {
     pillar: "sustainability",
     headline: "Cut AI Carbon Emissions",
-    body: "Real-time carbon monitoring for every model run. Automatically route workloads to greener infrastructure and reduce your AI carbon footprint by up to 40%.",
-    metric: "40%",
-    metricLabel: "average carbon reduction",
+    body: "Real-time carbon monitoring for every model run. Measure energy usage, CO₂ emissions, and compare against your baseline — automatically.",
+    metric: "29%",
+    metricLabel: "energy reduction vs baseline",
     icon: <Leaf size={24} />,
     accentColor: "green",
   },
   {
+    pillar: "water",
+    headline: "AquaTensor Water Intelligence",
+    body: "The world's first AI water footprint tracker. GreenTensor measures cooling water consumption and uses membrane distillation to produce net-positive water output.",
+    metric: "NET+",
+    metricLabel: "water positive — produces more than it uses",
+    icon: <Droplets size={24} />,
+    accentColor: "aqua",
+  },
+  {
     pillar: "security",
-    headline: "Detect Threats via Carbon Spikes",
-    body: "Cyberattacks leave a carbon signature. GreenTensor correlates compute anomalies with digital footprints to catch threats that traditional security tools miss.",
-    metric: "< 2min",
-    metricLabel: "mean time to detect",
+    headline: "Carbon Anomaly Detection",
+    body: "Cyberattacks leave a carbon signature. GreenTensor correlates compute anomalies with digital footprints to catch cryptomining, model poisoning, and data exfiltration.",
+    metric: "CLEAN",
+    metricLabel: "real-time threat status",
     icon: <Shield size={24} />,
     accentColor: "blue",
   },
@@ -114,7 +127,7 @@ export default function ThreePillarsSection() {
           <ScrollReveal>
             <div className="text-center mb-12">
               <span className="section-label text-gt-green">
-                {"// THE THREE PILLARS"}
+                {"// THE FOUR PILLARS"}
               </span>
               <h2
                 id="pillars-heading"
@@ -124,13 +137,13 @@ export default function ThreePillarsSection() {
                 Everything Your AI Needs to Be Responsible
               </h2>
               <p className="text-gt-muted mt-3 max-w-2xl mx-auto">
-                One platform. Three critical capabilities. Zero compromise on
-                performance.
+                One SDK. Four critical capabilities. The only tool that makes
+                AI carbon, water, security, and ESG reporting automatic.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {pillars.map((pillar, i) => (
               <ScrollReveal key={pillar.pillar} delay={i * 0.1}>
                 <PillarCard {...pillar} />

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Leaf, Shield, BarChart3, Package } from "lucide-react";
+import { Leaf, Shield, BarChart3, Package, Droplets } from "lucide-react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import CircuitDivider from "@/components/ui/CircuitDivider";
 
@@ -19,7 +19,7 @@ function InstallBanner() {
               Available now on PyPI
             </p>
             <p className="text-gt-muted text-xs mt-0.5">
-              Real package · v0.3.0 · MIT License · Python 3.9+
+              Real package · v0.6.0 · MIT License · Python 3.9+
             </p>
           </div>
         </div>
@@ -62,13 +62,22 @@ const sdkLines: CodeLine[] = [
 ];
 
 const outputLines: CodeLine[] = [
-  { text: "  +======================================+", type: "dim" },
-  { text: "  |        GreenTensor Report            |", type: "function" },
-  { text: "  +======================================+", type: "dim" },
-  { text: "  Runtime          : 12.34 s", type: "normal" },
-  { text: "  Energy Used      : 0.000412 kWh", type: "normal" },
-  { text: "  CO2 Emissions    : 0.000096 kg", type: "function" },
-  { text: "  ======================================", type: "dim" },
+  { text: "+======================================+", type: "dim" },
+  { text: "|   GreenTensor Report  v0.6.0         |", type: "function" },
+  { text: "+======================================+", type: "dim" },
+  { text: "Runtime          : 45.23 s", type: "normal" },
+  { text: "Energy Used      : 0.000412 kWh", type: "normal" },
+  { text: "CO2 Emissions    : 0.000096 kg", type: "function" },
+  { text: "Energy Saved     : 29.0% vs baseline", type: "function" },
+  { text: "-- AquaTensor Water Intelligence ----", type: "dim" },
+  { text: "Water Consumed   : 0.000202 L", type: "normal" },
+  { text: "Water Produced   : 0.001474 L (membrane)", type: "output" },
+  { text: "Net Water Impact : NET POSITIVE ✓", type: "function" },
+  { text: "-- Carbon Anomaly Detection ---------", type: "dim" },
+  { text: "Status           : CLEAN ✓", type: "function" },
+  { text: "-- Digital Footprint ----------------", type: "dim" },
+  { text: "Status           : CLEAN ✓", type: "function" },
+  { text: "+======================================+", type: "dim" },
 ];
 
 const colorMap: Record<CodeLine["type"], string> = {
@@ -180,39 +189,55 @@ function BaselineBlock() {
 const tabs = [
   {
     id: "carbon",
-    label: "Carbon Monitor",
+    label: "Carbon",
     icon: Leaf,
     color: "text-gt-green",
     content: {
       title: "Real-Time Carbon Tracking",
       description:
-        "See exactly how much CO₂ each model run produces. Compare workloads, set budgets, and get alerts when you exceed thresholds.",
+        "Measure energy usage and CO₂ emissions for every model run. Compare against your baseline and see exactly how much you saved.",
       metrics: [
         { label: "Energy Used", value: "0.000412 kWh", delta: "per run" },
         { label: "CO₂ Emitted", value: "0.000096 kg", delta: "per run" },
-        { label: "Saved vs Baseline", value: "40%", delta: "avg reduction" },
+        { label: "Energy Saved", value: "29.0%", delta: "vs baseline" },
+      ],
+    },
+  },
+  {
+    id: "water",
+    label: "AquaTensor",
+    icon: Droplets,
+    color: "text-blue-300",
+    content: {
+      title: "AquaTensor Water Intelligence",
+      description:
+        "The world's first AI water footprint tracker. Measures cooling water consumption and uses membrane distillation to produce net-positive water output.",
+      metrics: [
+        { label: "Water Consumed", value: "0.000202 L", delta: "cooling (WUE=0.49)" },
+        { label: "Water Produced", value: "0.001474 L", delta: "membrane distillation" },
+        { label: "Net Impact", value: "NET POSITIVE", delta: "-0.001272 L net" },
       ],
     },
   },
   {
     id: "security",
-    label: "Threat Detection",
+    label: "Security",
     icon: Shield,
     color: "text-gt-blue",
     content: {
-      title: "Compute Anomaly Detection",
+      title: "Carbon Anomaly Detection",
       description:
-        "Correlate carbon spikes with network activity to identify cryptomining, model poisoning, and data exfiltration attempts.",
+        "Correlate carbon spikes with digital footprints to identify cryptomining, model poisoning, and data exfiltration in real time.",
       metrics: [
-        { label: "Threats Blocked", value: "12", delta: "this week" },
-        { label: "Anomalies Flagged", value: "3", delta: "under review" },
-        { label: "MTTD", value: "1.8 min", delta: "-65% vs avg" },
+        { label: "Carbon Anomaly", value: "CLEAN ✓", delta: "no threats" },
+        { label: "Digital Footprint", value: "CLEAN ✓", delta: "no attacks" },
+        { label: "Idle Time", value: "2.10 s", delta: "detected & logged" },
       ],
     },
   },
   {
     id: "esg",
-    label: "ESG Reports",
+    label: "ESG",
     icon: BarChart3,
     color: "text-gt-cyan",
     content: {
@@ -221,7 +246,7 @@ const tabs = [
         "Generate GRI, TCFD, and CDP-aligned reports with one click. Export to PDF, CSV, or push directly to your sustainability platform.",
       metrics: [
         { label: "Reports Generated", value: "4", delta: "this quarter" },
-        { label: "Frameworks Covered", value: "GRI · TCFD · CDP", delta: "" },
+        { label: "Frameworks", value: "GRI · TCFD · CDP", delta: "" },
         { label: "Time Saved", value: "~6 weeks", delta: "per report" },
       ],
     },

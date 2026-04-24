@@ -10,6 +10,7 @@ type Config = {
   cudnnBenchmark: boolean;
   idleGpuDetection: boolean;
   batchSizeOptimizer: boolean;
+  aquaTensor: boolean;
 };
 
 const DEFAULT_CONFIG: Config = {
@@ -17,6 +18,7 @@ const DEFAULT_CONFIG: Config = {
   cudnnBenchmark: true,
   idleGpuDetection: false,
   batchSizeOptimizer: false,
+  aquaTensor: true,
 };
 
 function computeSavings(config: Config): {
@@ -24,37 +26,23 @@ function computeSavings(config: Config): {
   energySaved: number;
   co2Saved: number;
   speedup: number;
+  waterPositive: boolean;
 } {
   let gpuSavings = 8;
   let energySaved = 5;
   let speedup = 1.05;
 
-  if (config.mixedPrecision) {
-    gpuSavings += 10;
-    energySaved += 12;
-    speedup += 0.18;
-  }
-  if (config.cudnnBenchmark) {
-    gpuSavings += 5;
-    energySaved += 6;
-    speedup += 0.08;
-  }
-  if (config.idleGpuDetection) {
-    gpuSavings += 4;
-    energySaved += 8;
-    speedup += 0.02;
-  }
-  if (config.batchSizeOptimizer) {
-    gpuSavings += 6;
-    energySaved += 7;
-    speedup += 0.05;
-  }
+  if (config.mixedPrecision) { gpuSavings += 10; energySaved += 12; speedup += 0.18; }
+  if (config.cudnnBenchmark)  { gpuSavings += 5;  energySaved += 6;  speedup += 0.08; }
+  if (config.idleGpuDetection){ gpuSavings += 4;  energySaved += 8;  speedup += 0.02; }
+  if (config.batchSizeOptimizer){ gpuSavings += 6; energySaved += 7; speedup += 0.05; }
 
   return {
     gpuSavings,
     energySaved,
     co2Saved: Math.round(energySaved * 0.45),
     speedup: Math.round(speedup * 100) / 100,
+    waterPositive: config.aquaTensor,
   };
 }
 
@@ -76,6 +64,9 @@ function generateCode(config: Config): string {
   );
   lines.push(
     `    "batch_size_optimizer": ${config.batchSizeOptimizer ? "True" : "False"},`
+  );
+  lines.push(
+    `    "aqua_tensor": ${config.aquaTensor ? "True" : "False"},`
   );
   lines.push("}");
   lines.push("");
@@ -109,47 +100,49 @@ function generateDemoOutput(config: Config): DemoLine[] {
   if (config.batchSizeOptimizer) {
     lines.push({ text: "[GreenTensor] Batch size optimizer: ON ✓", type: "success" });
   }
+  if (config.aquaTensor) {
+    lines.push({ text: "[GreenTensor] AquaTensor Water Intelligence: ON ✓", type: "aqua" });
+  }
 
   lines.push({ text: "", type: "blank" });
   lines.push({ text: "Epoch 1/3: 100%|████████| loss=0.342", type: "epoch" });
   lines.push({ text: "Epoch 2/3: 100%|████████| loss=0.198", type: "epoch" });
   lines.push({ text: "Epoch 3/3: 100%|████████| loss=0.091", type: "epoch" });
   lines.push({ text: "", type: "blank" });
-  lines.push({ text: "╔══════════════════════════════════╗", type: "border" });
-  lines.push({ text: "║      GreenTensor Report          ║", type: "title" });
-  lines.push({ text: "╠══════════════════════════════════╣", type: "border" });
-  lines.push({ text: "║ Runtime        : 12.34 s         ║", type: "data" });
-  lines.push({ text: "║ Energy Used    : 0.000412 kWh    ║", type: "data" });
-  lines.push({ text: "║ CO₂ Emissions  : 0.000096 kg     ║", type: "data" });
-  lines.push({
-    text: `║ GPU Savings    : ${savings.gpuSavings}%             ║`,
-    type: "savings",
-  });
-  lines.push({ text: "╚══════════════════════════════════╝", type: "border" });
+  lines.push({ text: "+======================================+", type: "border" });
+  lines.push({ text: "|   GreenTensor Report  v0.6.0         |", type: "title" });
+  lines.push({ text: "+======================================+", type: "border" });
+  lines.push({ text: "Runtime          : 45.23 s", type: "data" });
+  lines.push({ text: "Energy Used      : 0.000412 kWh", type: "data" });
+  lines.push({ text: "CO2 Emissions    : 0.000096 kg", type: "data" });
+  lines.push({ text: `Energy Saved     : ${savings.energySaved}% vs baseline`, type: "savings" });
+  lines.push({ text: "-- AquaTensor Water Intelligence ----", type: "section" });
+  lines.push({ text: "Water Consumed   : 0.000202 L", type: "data" });
+  lines.push({ text: "Water Produced   : 0.001474 L (membrane)", type: "aqua" });
+  lines.push({ text: "Net Water Impact : NET POSITIVE ✓", type: "aqua-positive" });
+  lines.push({ text: "-- Carbon Anomaly Detection ---------", type: "section" });
+  lines.push({ text: "Status           : CLEAN ✓", type: "savings" });
+  lines.push({ text: "-- Digital Footprint ----------------", type: "section" });
+  lines.push({ text: "Status           : CLEAN ✓", type: "savings" });
+  lines.push({ text: "+======================================+", type: "border" });
 
   return lines;
 }
 
 function getOutputLineClass(type: string): string {
   switch (type) {
-    case "cmd":
-      return "text-gt-green";
-    case "info":
-      return "text-gt-cyan";
-    case "success":
-      return "text-green-400";
-    case "epoch":
-      return "text-gt-blue";
-    case "border":
-      return "text-gt-muted";
-    case "title":
-      return "text-gt-green font-semibold";
-    case "data":
-      return "text-gt-text";
-    case "savings":
-      return "text-gt-green font-semibold";
-    default:
-      return "text-gt-muted";
+    case "cmd":          return "text-gt-green";
+    case "info":         return "text-gt-cyan";
+    case "success":      return "text-green-400";
+    case "epoch":        return "text-gt-blue";
+    case "border":       return "text-gt-muted";
+    case "section":      return "text-gt-muted";
+    case "title":        return "text-gt-green font-semibold";
+    case "data":         return "text-gt-text";
+    case "savings":      return "text-gt-green font-semibold";
+    case "aqua":         return "text-blue-300";
+    case "aqua-positive": return "text-cyan-300 font-semibold";
+    default:             return "text-gt-muted";
   }
 }
 
@@ -313,6 +306,13 @@ export default function LiveDemoSection() {
                   checked={config.batchSizeOptimizer}
                   onChange={updateConfig("batchSizeOptimizer")}
                 />
+                <Toggle
+                  id="toggle-aqua-tensor"
+                  label="AquaTensor Water Intelligence"
+                  description="Tracks cooling water usage and produces net-positive water via membrane distillation at 60°C."
+                  checked={config.aquaTensor}
+                  onChange={updateConfig("aquaTensor")}
+                />
               </div>
 
               {/* Estimated savings */}
@@ -325,7 +325,7 @@ export default function LiveDemoSection() {
                     { label: "GPU Efficiency", value: `+${savings.gpuSavings}%`, color: "#22C55E" },
                     { label: "Energy Saved", value: `~${savings.energySaved}%`, color: "#3B82F6" },
                     { label: "CO₂ Reduced", value: `~${savings.co2Saved}%`, color: "#06B6D4" },
-                    { label: "Speedup", value: `${savings.speedup}×`, color: "#22C55E" },
+                    { label: "Water Impact", value: savings.waterPositive ? "NET +" : "Neutral", color: savings.waterPositive ? "#93C5FD" : "#94A3B8" },
                   ].map((stat) => (
                     <div
                       key={stat.label}

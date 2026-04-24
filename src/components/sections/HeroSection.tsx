@@ -6,47 +6,51 @@ import Button from "@/components/ui/Button";
 
 const TERMINAL_LINES = [
   { text: "$ pip install greentensor", delay: 0, type: "cmd" },
-  { text: "Successfully installed greentensor-0.3.0", delay: 600, type: "success" },
+  { text: "Successfully installed greentensor-0.6.0", delay: 600, type: "success" },
   { text: "", delay: 900, type: "blank" },
   { text: "$ python train.py", delay: 1100, type: "cmd" },
   { text: "[GreenTensor] Tracking enabled", delay: 1700, type: "info" },
   { text: "[GreenTensor] Mixed precision: ON", delay: 2000, type: "info" },
-  { text: "[GreenTensor] cuDNN benchmark: ON", delay: 2300, type: "info" },
-  { text: "", delay: 2600, type: "blank" },
-  { text: "Epoch 1/3: 100%|████████| loss=0.342", delay: 2900, type: "epoch" },
-  { text: "Epoch 2/3: 100%|████████| loss=0.198", delay: 3400, type: "epoch" },
-  { text: "Epoch 3/3: 100%|████████| loss=0.091", delay: 3900, type: "epoch" },
-  { text: "", delay: 4200, type: "blank" },
-  { text: "╔══════════════════════════════════╗", delay: 4400, type: "report" },
-  { text: "║      GreenTensor Report          ║", delay: 4550, type: "report-title" },
-  { text: "╠══════════════════════════════════╣", delay: 4700, type: "report" },
-  { text: "║ Runtime        : 12.34 s         ║", delay: 4850, type: "report-data" },
-  { text: "║ Energy Used    : 0.000412 kWh    ║", delay: 5000, type: "report-data" },
-  { text: "║ CO₂ Emissions  : 0.000096 kg     ║", delay: 5150, type: "report-data" },
-  { text: "║ GPU Savings    : 23%             ║", delay: 5300, type: "report-savings" },
-  { text: "╚══════════════════════════════════╝", delay: 5450, type: "report" },
+  { text: "[GreenTensor] AquaTensor Water Intelligence: ON", delay: 2300, type: "aqua" },
+  { text: "[GreenTensor] Carbon Anomaly Detection: ON", delay: 2600, type: "info" },
+  { text: "", delay: 2900, type: "blank" },
+  { text: "Epoch 1/3: 100%|████████| loss=0.342", delay: 3200, type: "epoch" },
+  { text: "Epoch 2/3: 100%|████████| loss=0.198", delay: 3700, type: "epoch" },
+  { text: "Epoch 3/3: 100%|████████| loss=0.091", delay: 4200, type: "epoch" },
+  { text: "", delay: 4500, type: "blank" },
+  { text: "+======================================+", delay: 4700, type: "report" },
+  { text: "|   GreenTensor Report  v0.6.0         |", delay: 4850, type: "report-title" },
+  { text: "+======================================+", delay: 5000, type: "report" },
+  { text: "Runtime          : 45.23 s", delay: 5150, type: "report-data" },
+  { text: "Energy Used      : 0.000412 kWh", delay: 5300, type: "report-data" },
+  { text: "CO2 Emissions    : 0.000096 kg", delay: 5450, type: "report-data" },
+  { text: "Energy Saved     : 29.0% vs baseline", delay: 5600, type: "report-savings" },
+  { text: "-- AquaTensor Water Intelligence ----", delay: 5750, type: "report-section" },
+  { text: "Water Consumed   : 0.000202 L", delay: 5900, type: "report-data" },
+  { text: "Water Produced   : 0.001474 L (membrane)", delay: 6050, type: "aqua-data" },
+  { text: "Net Water Impact : -0.001272 L (NET POSITIVE)", delay: 6200, type: "aqua-positive" },
+  { text: "-- Carbon Anomaly Detection ---------", delay: 6350, type: "report-section" },
+  { text: "Status           : CLEAN ✓", delay: 6500, type: "report-savings" },
+  { text: "-- Digital Footprint ----------------", delay: 6650, type: "report-section" },
+  { text: "Status           : CLEAN ✓", delay: 6800, type: "report-savings" },
+  { text: "+======================================+", delay: 6950, type: "report" },
 ];
 
 function getLineClass(type: string): string {
   switch (type) {
-    case "cmd":
-      return "text-gt-green";
-    case "success":
-      return "text-green-400";
-    case "info":
-      return "text-gt-cyan";
-    case "epoch":
-      return "text-gt-blue";
-    case "report":
-      return "text-gt-muted";
-    case "report-title":
-      return "text-gt-green font-semibold";
-    case "report-data":
-      return "text-gt-text";
-    case "report-savings":
-      return "text-gt-green font-semibold";
-    default:
-      return "text-gt-muted";
+    case "cmd":          return "text-gt-green";
+    case "success":      return "text-green-400";
+    case "info":         return "text-gt-cyan";
+    case "aqua":         return "text-blue-300";
+    case "epoch":        return "text-gt-blue";
+    case "report":       return "text-gt-muted";
+    case "report-title": return "text-gt-green font-semibold";
+    case "report-section": return "text-gt-muted";
+    case "report-data":  return "text-gt-text";
+    case "report-savings": return "text-gt-green font-semibold";
+    case "aqua-data":    return "text-blue-300";
+    case "aqua-positive": return "text-cyan-300 font-semibold";
+    default:             return "text-gt-muted";
   }
 }
 
@@ -175,8 +179,9 @@ export default function HeroSection() {
               className="text-gt-muted text-lg leading-relaxed max-w-xl"
             >
               GreenTensor is an open-source Python middleware that gives every
-              AI team real-time carbon tracking, GPU optimization, and automated
-              ESG reporting — with one line of code.
+              AI team real-time carbon tracking, GPU optimization, water
+              intelligence via <span className="text-blue-300 font-medium">AquaTensor</span>,
+              and automated ESG reporting — with one line of code.
             </motion.p>
 
             {/* Live stats row */}
@@ -204,7 +209,7 @@ export default function HeroSection() {
                 <span aria-hidden="true">★</span> GitHub
               </a>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gt-surface border border-gt-green/30 text-gt-green text-xs font-mono">
-                v0.3.0
+                v0.6.0
               </span>
             </motion.div>
 
@@ -219,7 +224,7 @@ export default function HeroSection() {
               >
                 <span className="text-gt-muted">$</span> pip install greentensor
                 <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-gt-green/10 border border-gt-green/20 font-sans">
-                  v0.3.0
+                  v0.6.0
                 </span>
               </a>
             </motion.div>
